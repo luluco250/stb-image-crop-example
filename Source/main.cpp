@@ -39,6 +39,7 @@ int main() {
 void write_test_image() {
 	std::array<Color, TestImageWidth * TestImageHeight> img_data;
 
+	// Generate UV coord image.
 	for (auto y = 0; y < TestImageHeight; ++y) {
 		for (auto x = 0; x < TestImageWidth; ++x) {
 			auto& pixel = img_data[x + TestImageWidth * y];
@@ -48,11 +49,10 @@ void write_test_image() {
 		}
 	}
 
-	std::array<Color, TestImageWidth * (TestImageHeight / 2)> cropped_img_data;
-
+	// Shift pixels to fit aspect ratio.
 	for (auto y = 0; y < TestImageHeight / 2; ++y) {
 		for (auto x = 0; x < TestImageWidth; ++x) {
-			cropped_img_data[x + TestImageWidth * y] =
+			img_data[x + TestImageWidth * y] =
 				std::move(img_data[x + TestImageWidth * (y + TestImageHeight / 2)]);
 		}
 	}
@@ -62,7 +62,7 @@ void write_test_image() {
 		TestImageWidth,
 		TestImageHeight / 2,
 		4,
-		cropped_img_data.data()) == 0
+		img_data.data()) == 0
 	) {
 		throw std::runtime_error("Failed to write test image file");
 	}
