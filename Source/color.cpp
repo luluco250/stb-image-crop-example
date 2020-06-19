@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <utility>
+#include <cmath>
 
 Color::Color() {
 	_data.rgba = 0;
@@ -101,4 +102,14 @@ std::uint32_t Color::abgr() const {
 
 	result.comp = {_data.comp.a, _data.comp.b, _data.comp.g, _data.comp.r};
 	return result.abgr;
+}
+
+void Color::to_gamma(float gamma) {
+	apply_rgb([gamma](std::uint8_t c) -> std::uint8_t {
+		return std::pow(c / 255.f, gamma) * 255.f;
+	});
+}
+
+void Color::to_linear(float gamma) {
+	to_gamma(1.f / gamma);
 }

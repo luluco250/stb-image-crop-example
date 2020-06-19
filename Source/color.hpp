@@ -41,6 +41,23 @@ public:
 	std::uint32_t argb() const;
 
 	std::uint32_t abgr() const;
+
+	template<class Func>
+	void apply(Func func) {
+		apply_rgb(func);
+		a(func(a()));
+	}
+
+	template<class Func>
+	void apply_rgb(Func func) {
+		r(func(r()));
+		g(func(g()));
+		b(func(b()));
+	}
+
+	void to_gamma(float gamma = 2.333333f);
+
+	void to_linear(float gamma = 2.333333f);
 };
 
 #endif // Include guard.
